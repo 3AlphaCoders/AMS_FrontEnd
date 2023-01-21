@@ -2,9 +2,9 @@ const { createProxyMiddleware } = require('http-proxy-middleware');
 
 module.exports = function(app) {
   app.use(
-    '/api',
+    '/api/v1/',
     createProxyMiddleware({
-      target: 'https://web-document-application.onrender.com/api/v1/',
+      target: 'https://web-document-application.onrender.com',
       changeOrigin: true,
     })
   );
