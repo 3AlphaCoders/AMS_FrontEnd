@@ -42,29 +42,29 @@ const ApplicationDetail = () => {
                 <ToastContainer />
             </div>
             <div className='appDetMain'>
-
-                <div className='appDetTitle'>
-                    <h3>Your Application Detail : </h3>
+                <div className='apaDetBg'></div>
+                <div className='appDetHead'>
+                    <h3>Your Application Detail </h3>
                     {/* <span>{appDetail?.applicationTitle}</span> */}
                 </div>
 
                 <div className="appDetOther">
-                    <div>
+                    <div className='appDetTitle'>
                         <h3>Application Title :</h3>
                         <span>{appDetail?.applicationTitle}</span>
                     </div>
                     {appDetail?.acceptedBy?
-                    <div>
+                    <div className='accepted'>
                         <h3>Accepted By : </h3>
                         <span>{appDetail?.acceptedBy?.name}</span>
                     </div>:''}
                     {appDetail?.rejectedBy?
-                    <div>
+                    <div className='rejected'>
                         <h3>Rejected By : </h3>
                         <span>{appDetail?.rejectedBy?.name}</span>
                     </div>:''}
                     {appDetail?.forwardedBy?
-                    <div>
+                    <div className='forwarded'>
                         <h3>forwarded By : </h3>
                         <span>{appDetail?.forwardedBy?.name}</span>
                     </div>:''}
@@ -79,11 +79,12 @@ const ApplicationDetail = () => {
                 </div>
                 <div className='appDetailLife'>
                     <h3 className="appLifeHead">Application History</h3>
-    
-                    {appDetail?.applicationLife?.map((appLife)=>{
+                    {appDetail?.applicationLife?.length ?
+                      
+                      appDetail?.applicationLife?.map((appLife)=>{
                         return (
                             
-                            <div className='appLifeItem'>
+                            <div className='appLifeItem' key={appLife?._id}>
                                 <div>
                                   <h3>Application Status : </h3>
                                   <span>{appLife?.status}</span>
@@ -94,7 +95,11 @@ const ApplicationDetail = () => {
                                 </div>
                             </div>
                         )
-                    })}
+                    })
+                    :
+                    <div className='noHistory'>No History Exist!</div>
+                    }
+                    
                 </div>
             </div>
         </div>

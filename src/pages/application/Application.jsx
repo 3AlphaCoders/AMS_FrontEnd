@@ -10,6 +10,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 const Application = () => {
 
+    const [loading, setLoading] = useState(false);
     const [data, setData] = useState([]);
     useEffect(()=>{
         var config = {
@@ -17,11 +18,14 @@ const Application = () => {
         url: '/application/',
       };
 
+      setLoading(true)
       axios(config)
       .then(function (response) {
+        setLoading(false)
         setData(response.data.applications);
       })
       .catch(function (error) {
+        setLoading(false)
         toast.error(error.response.data.message, {
           position: toast.POSITION.TOP_CENTER
         });
@@ -106,6 +110,14 @@ const Application = () => {
                 checkboxSelection
             />
         </div>
+        {loading ? (
+        <div className="loading-ring">
+          Loading
+          <span></span>
+        </div>
+      ) : (
+        ""
+      )}
     </div>
   )
 }

@@ -4,15 +4,15 @@ import Navbar from "../../components/navbar/Navbar";
 import { DataGrid } from "@mui/x-data-grid";
 import { useContext } from "react";
 import { AuthContext } from "../../context/AuthContext";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import { FormControl } from "@mui/material";
 
 const Classes = () => {
   const { user } = useContext(AuthContext);
-  const location = useLocation();
-  console.log(location);
+  // const location = useLocation();
+  // console.log(location);
   const [data, setData] = useState([]);
   const [course, setCourse] = useState([]);
   const [dept, setDept] = useState([]);
@@ -36,13 +36,14 @@ const Classes = () => {
         .catch(function (error) {
           // console.log(error);
         });
-      showClasses();
-    } else if (location?.state?.course_id && location?.state?.dept_id) {
-      showClasses();
+        if(currentuser?.role === "HOD"){
+          showClasses();
+        }
+     
     } else {
       setData([]);
     }
-  }, [location?.state]);
+  }, [currentuser?.role]);
 
   const checkYear = (checkYear) => {
     if (checkYear === 1) {
@@ -99,7 +100,7 @@ const Classes = () => {
         url: `/course/${selCourse.current.value}/${selDept.current.value}`,
       };
 
-      setLoading(false);
+      setLoading(true);
       axios(config)
         .then(function (response) {
           setLoading(false);
@@ -187,25 +188,17 @@ const Classes = () => {
               onChange={handleDept}
             >
               {user?.role === "HOD" ? (
-                <option value={currentuser?.courseId?._id} disabled>
+                <option value={currentuser?.courseId?._id}>
                   {currentuser?.courseId?.courseName}
                 </option>
               ) : (
                 <>
-                  {location?.state?.course_id ? (
-                    <option value={location?.state?.course_id}>
-                      {location?.state?.course_name}
+                  <option>select</option>
+                  {course.map((courseEle) => (
+                    <option key={courseEle._id} value={courseEle._id}>
+                      {courseEle.courseName}
                     </option>
-                  ) : (
-                    <>
-                      <option>select</option>
-                      {course.map((courseEle) => (
-                        <option key={courseEle._id} value={courseEle._id}>
-                          {courseEle.courseName}
-                        </option>
-                      ))}
-                    </>
-                  )}
+                  ))}
                 </>
               )}
             </select>
@@ -224,25 +217,17 @@ const Classes = () => {
               onChange={showClasses}
             >
               {user.role === "HOD" ? (
-                <option value={currentuser?.deptId?._id} disabled>
+                <option value={currentuser?.deptId?._id}>
                   {currentuser?.deptId?.deptName}
                 </option>
               ) : (
                 <>
-                  {location?.state?.dept_id ? (
-                    <option value={location?.state?.dept_id}>
-                      {location?.state?.dept_name}
+                  <option>select</option>
+                  {dept.map((dept) => (
+                    <option key={dept._id} value={dept._id}>
+                      {dept.deptName}
                     </option>
-                  ) : (
-                    <>
-                      <option>select</option>
-                      {dept.map((dept) => (
-                        <option key={dept._id} value={dept._id}>
-                          {dept.deptName}
-                        </option>
-                      ))}
-                    </>
-                  )}
+                  ))}
                 </>
               )}
             </select>

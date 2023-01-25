@@ -92,14 +92,15 @@ const Departments = (props) => {
             <Link
               to="/classes"
               style={{ textDecoration: "none" }}
-              state={{
+              
+            >
+            {/* state={{
                 course_id:
                   location?.state?.course_id || selCourse.current.value,
                 course_name: location?.state?.course_name,
                 dept_id: params.id,
                 dept_name: params.row.deptName,
-              }}
-            >
+              }} */}
               <div className="viewButton">View Classes</div>
             </Link>
           </div>
