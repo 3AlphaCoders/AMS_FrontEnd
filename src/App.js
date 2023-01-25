@@ -24,6 +24,7 @@ import PendingApplication from "./pages/pendingapplication/PendingApplication";
 import Notice from "./pages/notice/Notice";
 import CreateNotice from "./pages/notice/createnotice/CreateNotice";
 import VerifyEmail from "./pages/verifyemail/VerifyEmail";
+import ApplicationDetail from './pages/application/applicationdetail/ApplicationDetail';
 
 function App() {
   const [data, setData] = useState([]);
@@ -35,7 +36,7 @@ function App() {
     if(user !== null){
       const showMeQuery = {
         method: 'get',
-        url: '/user/showMe',
+        url: `/user/showMe`,
       };
       
       axios(showMeQuery)
@@ -132,15 +133,7 @@ function App() {
                 ) : (
                   ""
                 )}
-                <Route path="application">
-                  <Route index element={<Application />} />
-                  <Route
-                    path="create-application"
-                    element={
-                      <CreateApplication title="Create New Application" />
-                    }
-                  />
-                </Route>
+               
 
                 <Route path="myprofile" element={<Myprofile props={data} />}></Route>
                 <Route
@@ -163,13 +156,30 @@ function App() {
                 {user?.role === "admin" ? (
                   ""
                 ) : (
-                  <Route path="notice">
-                    <Route index element={<Notice />} />
-                    <Route
-                      path="create-notice"
-                      element={<CreateNotice title="Create New Notice" />}
-                    />
-                  </Route>
+                  <>
+                    <Route path="application">
+                      <Route index element={<Application />} />
+                      <Route
+                        path="create-application"
+                        element={
+                          <CreateApplication title="Create New Application" />
+                        }
+                      />
+                      <Route
+                        path="application-detail/:id"
+                        element={
+                          <ApplicationDetail />
+                        }
+                      />
+                    </Route>
+                    <Route path="notice">
+                      <Route index element={<Notice />} />
+                      <Route
+                        path="create-notice"
+                        element={<CreateNotice title="Create New Notice" />}
+                      />
+                    </Route>
+                  </>
                 )}
               </>
             ) : (

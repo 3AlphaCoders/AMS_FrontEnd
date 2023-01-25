@@ -73,7 +73,7 @@ const Application = () => {
           renderCell: (params) => {
             return (
               <div className="cellAction">
-                <Link to='/courses/adddepartment' state={{course_id:params.id}} style={{ textDecoration: "none" }}>
+                <Link to={`/application/application-detail/${params.id}`} state={{course_id:params.id}} style={{ textDecoration: "none" }}>
                   <div className="viewButton">View Detail</div>
                 </Link>
               </div>
