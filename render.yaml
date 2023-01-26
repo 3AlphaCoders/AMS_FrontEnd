@@ -1,0 +1,19 @@
+- type: web
+    name: web-document-ui
+    env: static
+    buildCommand: npm run build
+    staticPublishPath: ./build
+    pullRequestPreviewsEnabled: true # optional
+    buildFilter:
+      paths:
+      - src/**/*.js
+      ignoredPaths:
+      - src/**/*.test.js
+    headers:
+      - path: /*
+        name: X-Frame-Options
+        value: sameorigin
+    routes:
+      - type: redirect
+        source: /auth/*
+        destination: https://web-document-application.onrender.com/api/v1/
