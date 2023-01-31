@@ -4,12 +4,31 @@ import GroupIcon from "@mui/icons-material/Group";
 import MenuBookIcon from "@mui/icons-material/MenuBook";
 import SettingsIcon from "@mui/icons-material/Settings";
 import { Link } from "react-router-dom";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../context/AuthContext.js";
-
+import axios from "axios";
 
 const Sidebar = () => {
   const { user } = useContext(AuthContext);
+  const [currentUser, setCurrentUser] = useState([]);
+
+  useEffect(()=>{
+    const showMeQuery = {
+      method: "get",
+      url: `/user/showMe`,
+    };
+
+    axios(showMeQuery)
+      .then(function (response) {
+        setCurrentUser(response.data.user);
+        // console.log(response.data.user);
+      })
+      .catch(function (error) {
+        // console.log(error);
+      });
+    
+  }, [user])
+
 
   return (
     <div className="sidebar">
@@ -63,6 +82,26 @@ const Sidebar = () => {
               <MenuBookIcon className="icon" />
               <Link to="/classes">
                 <span>Classes</span>
+              </Link>
+            </li>
+          ) : (
+            ""
+          )}
+          {currentUser?.role === "HOD" && currentUser?.deptId ? (
+            <li>
+              <MenuBookIcon className="icon" />
+              <Link to={`/course/department-teacher/${currentUser?.courseId?._id}/${currentUser?.deptId?._id}`} >
+                <span>Department Teachers</span>
+              </Link>
+            </li>
+          ) : (
+            ""
+          )}
+          {currentUser?.role === "mentor" && currentUser?.classId ? (
+            <li>
+              <MenuBookIcon className="icon" />
+              <Link to={`/course/class-student/${currentUser?.courseId?._id}/${currentUser?.deptId?._id}/${currentUser?.classId}`} >
+                <span>Class Students</span>
               </Link>
             </li>
           ) : (

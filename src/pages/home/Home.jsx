@@ -5,6 +5,8 @@ import Widget from '../../components/widget/Widget'
 import HomeTable from '../../components/hometable/HomeTable'
 
 const Home = () => {
+
+
   return (
     <div className='home'>
         <Sidebar />

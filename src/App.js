@@ -1,4 +1,4 @@
-import './app.scss'
+import "./app.scss";
 import Home from "./pages/home/Home";
 
 import Login from "./pages/login/Login";
@@ -24,52 +24,50 @@ import PendingApplication from "./pages/pendingapplication/PendingApplication";
 import Notice from "./pages/notice/Notice";
 import CreateNotice from "./pages/notice/createnotice/CreateNotice";
 import VerifyEmail from "./pages/verifyemail/VerifyEmail";
-import ApplicationDetail from './pages/application/applicationdetail/ApplicationDetail';
+import ApplicationDetail from "./pages/application/applicationdetail/ApplicationDetail";
+import DepartmentTeacher from "./pages/departments/departmentTeacher/DepartmentTeacher";
+import ClassStudents from "./pages/classes/classstudents/ClassStudents";
 
 function App() {
   const [data, setData] = useState([]);
   const [course, setCourse] = useState([]);
 
   const { user } = useContext(AuthContext);
-  
-  useEffect(()=>{
-    if(user !== null){
+
+  useEffect(() => {
+    if (user !== null) {
       const showMeQuery = {
-        method: 'get',
+        method: "get",
         url: `/user/showMe`,
       };
-      
-      axios(showMeQuery)
-      .then(function (response) {
-        setData(response.data.user)
-        if(user?.role === 'HOD' || user?.role === 'mentor'){
-          setCourse(response.data.user)
-        }
-      })
-      .catch(function (error) {
-        // console.log(error);
-      });
-  
 
-    if(user?.role === 'admin' || user?.role === 'principal'){
-      var courseQuery = {
-        method: "get",
-        url: "/course/",
-      };
-      
-      axios(courseQuery)
+      axios(showMeQuery)
         .then(function (response) {
-          setCourse(response.data.courses);
+          setData(response.data.user);
+          if (user?.role === "HOD" || user?.role === "mentor") {
+            setCourse(response.data.user);
+          }
         })
         .catch(function (error) {
           // console.log(error);
         });
-    }
 
-    }
-    
-  },[user])
+      if (user?.role === "admin" || user?.role === "principal") {
+        var courseQuery = {
+          method: "get",
+          url: "/course/",
+        };
 
+        axios(courseQuery)
+          .then(function (response) {
+            setCourse(response.data.courses);
+          })
+          .catch(function (error) {
+            // console.log(error);
+          });
+      }
+    }
+  }, [user]);
 
   return (
     <div>
@@ -86,7 +84,7 @@ function App() {
               <>
                 <Route
                   path="/dashboard"
-                  element={user ? <Home /> : <Login />}
+                  element={user ? <Home  /> : <Login />}
                 ></Route>
                 {user?.role === "student" ? (
                   ""
@@ -102,14 +100,14 @@ function App() {
                 {user?.role === "admin" || user?.role === "principal" ? (
                   <>
                     <Route path="courses">
-                      <Route index element={<Courses  allCourses={course}  />} />
-                      <Route
-                        path="addcourse"
-                        element={<AddCourse />}
-                      />
+                      <Route index element={<Courses allCourses={course} />} />
+                      <Route path="addcourse" element={<AddCourse />} />
                     </Route>
                     <Route path="departments">
-                      <Route index element={<Departments allCourses={course} />} />
+                      <Route
+                        index
+                        element={<Departments allCourses={course} />}
+                      />
                       <Route
                         path="adddepartment"
                         element={<AddDepartment title="Add new Department" />}
@@ -123,19 +121,29 @@ function App() {
                 {user?.role === "admin" ||
                 user?.role === "principal" ||
                 user?.role === "HOD" ? (
-                  <Route path="classes">
-                    <Route index element={<Classes />} />
-                    <Route
-                      path="addclass"
-                      element={<AddClasses title="Add new Class" />}
-                    />
-                  </Route>
+                  <>
+                    <Route path="classes">
+                      <Route index element={<Classes />} />
+                      <Route
+                        path="addclass"
+                        element={<AddClasses title="Add new Class" />}
+                      />
+                    </Route>
+                    <Route path="course">
+                      <Route
+                        path="department-teacher/:courseId/:deptId"
+                        element={<DepartmentTeacher />}
+                      />
+                    </Route>
+                  </>
                 ) : (
                   ""
                 )}
-               
 
-                <Route path="myprofile" element={<Myprofile props={data} />}></Route>
+                <Route
+                  path="myprofile"
+                  element={<Myprofile props={data} />}
+                ></Route>
                 <Route
                   path="user/change-password"
                   element={<ChangePass />}
@@ -146,10 +154,16 @@ function App() {
                 user?.role === "HOD" ||
                 user?.role === "mentor" ||
                 user.role === "admin" ? (
-                  <Route
-                    path="pending-application"
-                    element={<PendingApplication />}
-                  ></Route>
+                  <>
+                    <Route
+                      path="pending-application"
+                      element={<PendingApplication />}
+                    ></Route>
+                    <Route
+                      path="course/class-student/:courseId/:deptId/:classId"
+                      element={<ClassStudents />}
+                    />
+                  </>
                 ) : (
                   ""
                 )}
@@ -167,9 +181,7 @@ function App() {
                       />
                       <Route
                         path="application-detail/:id"
-                        element={
-                          <ApplicationDetail />
-                        }
+                        element={<ApplicationDetail />}
                       />
                     </Route>
                     <Route path="notice">

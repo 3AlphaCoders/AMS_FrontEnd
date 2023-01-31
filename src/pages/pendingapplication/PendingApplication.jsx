@@ -20,11 +20,14 @@ const PendingApplication = () => {
       url: "/application/pending",
     };
 
+    setLoading(true)
     axios(config)
       .then(function (response) {
+        setLoading(false)
         setData(response.data.applications);
       })
       .catch(function (error) {
+        setLoading(false)
         toast.error(error.response.data.message, {
           position: toast.POSITION.TOP_CENTER,
         });

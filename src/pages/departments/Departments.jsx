@@ -6,6 +6,7 @@ import { Link, useLocation } from "react-router-dom";
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import { FormControl } from "@mui/material";
+import LaunchIcon from '@mui/icons-material/Launch';
 
 const Departments = (props) => {
   const location = useLocation();
@@ -35,7 +36,7 @@ const Departments = (props) => {
           // console.log(error);
         });
     }
-  }, [location.state]);
+  }, [location?.state]);
 
   const handleDept = () => {
     if (selCourse.current.value !== "Select") {
@@ -59,10 +60,18 @@ const Departments = (props) => {
     }
   };
 
+    const clearLocation = ()=>{
+      location.state = null;
+    }
   const userColumns = [
     {
       field: "deptName",
       headerName: "Department Name",
+      renderCell: (params) => {
+        return (
+          <Link to={`/course/department-teacher/${selCourse.current.value}/${params.row._id}`} >{params.row.deptName} <LaunchIcon  style={{fontSize: '16px'}} /></Link>
+        );
+      },
       width: 350,
     },
 
@@ -70,6 +79,7 @@ const Departments = (props) => {
       field: "HOD",
       headerName: "Department HOD",
       width: 350,
+      
       valueGetter: (params) => `${params.row.HOD ? "HOD PRESENT" : "NO HOD"}`,
     },
 
@@ -135,6 +145,7 @@ const Departments = (props) => {
               required
               id="courseMenu"
               onChange={handleDept}
+              onClick={location?.state?clearLocation:handleDept}
             >
               {location?.state?.course_id ? (
                 <option value={location.state.course_id}>

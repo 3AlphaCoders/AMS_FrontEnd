@@ -33,7 +33,6 @@ const AddUser = (props) => {
   const selClass = useRef();
 
   useEffect(() => {
-    
     if(props?.props?.role === "HOD"){
       var config = {
         method: 'get',

@@ -1,0 +1,44 @@
+.departmentTeacher {
+    display: flex;
+    width: 100%;
+
+    
+    .dtContainer{
+        flex:6;
+
+        .dtHead{
+            width: 100%;
+            padding:20px 30px;
+            margin:10px 0;
+            font-size: 24px;
+            color: gray;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 2px 2px 5px 1px rgb(206, 206, 206);
+        
+          }
+          
+
+          .datagrid{
+            height: 570px;
+            box-shadow: 2px 2px 5px 1px rgb(206, 206, 206);
+          }
+
+          .cellAction {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        
+            .viewButton {
+              padding: 2px 5px;
+              border-radius: 5px;
+              color: darkblue;
+              border: 1px dotted rgba(0, 0, 139, 0.596);
+              cursor: pointer;
+            }
+          }
+    }
+  
+  }

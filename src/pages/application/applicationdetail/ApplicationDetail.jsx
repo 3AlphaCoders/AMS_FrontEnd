@@ -31,7 +31,8 @@ const ApplicationDetail = () => {
         setLoading(false);
     });
     
-  }, [params.id]);
+    
+  }, [params?.id]);
 
   return (
     <div className="aplicationDetail">

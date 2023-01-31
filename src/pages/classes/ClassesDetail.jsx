@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import { FormControl } from "@mui/material";
-import LaunchIcon from '@mui/icons-material/Launch';
+import { getClassDetails } from "../../service/classService";
 
 const Classes = () => {
   const { user } = useContext(AuthContext);
@@ -18,6 +18,7 @@ const Classes = () => {
   const [course, setCourse] = useState([]);
   const [dept, setDept] = useState([]);
   const [currentuser, setCurrentUser] = useState();
+  const [classDet, setClassDet] = useState([]);
   const [loading, setLoading] = useState(false);
 
   const selCourse = useRef();
@@ -45,6 +46,30 @@ const Classes = () => {
     }
   }, [currentuser?.role]);
 
+  useEffect(() => {
+    for (let key in data) {
+      // console.log(data[key]._id)
+      // console.log(selCourse.current.value, selDept.current.value,data[key]._id)
+      getClassDetails(
+        selCourse.current.value,
+        selDept.current.value,
+        data[key]._id
+      )
+        .then(function (response) {
+          console.log(response['class']);
+          setClassDet((oldArray) => [
+            ...oldArray,
+            response?.class?.mentor?.name,
+          ]);
+          setLoading(false);
+          console.log(classDet);
+        })
+        .catch(function (error) {
+          console.log(error);
+          setLoading(false);
+        });
+    }
+  }, [data]);
 
   const checkYear = (checkYear) => {
     if (checkYear === 1) {
@@ -122,7 +147,7 @@ const Classes = () => {
     {
       field: "year",
       headerName: "Course Year",
-      width: 180,
+      width: 220,
       valueGetter: (params) =>
         `${
           params.row.year
@@ -133,22 +158,17 @@ const Classes = () => {
     {
       field: "section",
       headerName: "Section",
-      width: 180,
+      width: 200,
     },
     {
       field: "seats",
       headerName: "Total Seats in Section",
-      width: 200,
+      width: 300,
     },
     {
       field: "strength",
       headerName: "Total Students",
-      renderCell: (params) => {
-        return (
-          <Link to={`/course/class-student/${selCourse.current.value}/${selDept.current.value}/${params.row._id}`} >{params.row.strength} <LaunchIcon  style={{fontSize: '16px'}} /></Link>
-        );
-      },
-      width: 200,
+      width: 300,
     },
     {
       field: "mentor",
@@ -156,27 +176,23 @@ const Classes = () => {
       width: 300,
     },
   ];
-  const actionColumn = [
-    {
-      field: "action",
-      headerName: "Action",
-      width: 200,
-      renderCell: (params) => {
-        return (
-          <div className="cellAction">
-          <Link to={`/course/class-student/${selCourse.current.value}/${selDept.current.value}/${params.row._id}`} style={{ textDecoration: "none" }}>
-            <div className="viewButton">View Class Students</div>
-          </Link>
-{/*         
-            <Link to='/departments/adddepartment' style={{ textDecoration: "none" }}>
-              <div className="viewButton">Add New Classes</div>
-            </Link> */}
+  // const actionColumn = [
+  //   {
+  //     field: "action",
+  //     headerName: "Action",
+  //     width: 200,
+  //     renderCell: (params) => {
+  //       return (
+  //         <div className="cellAction">
+  //           <Link to='/departments/adddepartment' style={{ textDecoration: "none" }}>
+  //             <div className="viewButton">Add New Classes</div>
+  //           </Link>
 
-          </div>
-        );
-      },
-    },
-  ];
+  //         </div>
+  //       );
+  //     },
+  //   },
+  // ];
 
   return (
     <div className="courses">
@@ -254,7 +270,7 @@ const Classes = () => {
           className="datagrid"
           getRowId={(row) => row._id}
           rows={data}
-          columns={userColumns.concat(actionColumn)}
+          columns={userColumns}
           pageSize={9}
           rowsPerPageOptions={[9]}
           checkboxSelection
