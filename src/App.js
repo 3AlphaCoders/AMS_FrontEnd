@@ -197,7 +197,7 @@ function App() {
             ) : (
               <Route path="*" element={<NotFound />} />
             )}
-            <Route path="/verifyEmail" element={<VerifyEmail />}></Route>
+            <Route path="verifyEmail" element={<VerifyEmail />}></Route>
           </Route>
         </Routes>
       </BrowserRouter>
