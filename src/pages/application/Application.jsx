@@ -66,6 +66,11 @@ const Application = () => {
         {
           field: "status",
           headerName: "Status",
+          renderCell: (params) => {
+            return (
+              <div onClick={()=>{handleFile(params.row.applicationFile)}} className={params.row.status}>{params.row.status}</div>
+            );
+          },
           width: 150,
         },
       ];
@@ -87,16 +92,16 @@ const Application = () => {
       ];
 
   return (
-    <div className='courses'>
+    <div className='myApplication'>
         <Sidebar />
-        <div className='courseContainer'>
+        <div className='myAppContainer'>
             <Navbar />
             <div id='result'>
                 <ToastContainer />
             </div>
-            <div className="courseTitle">
+            <div className="myAppTitle">
                 My Applications
-                <Link to="/application/create-application" className="courseLink">
+                <Link to="/application/create-application" className="createAppLink">
                 Create Application
                 </Link>
             </div>

@@ -67,6 +67,7 @@ const Notice = () => {
     {
       field: "createdAt",
       headerName: "Created At",
+      valueGetter: (params) => `${params.row.createdAt}`,
       width: 200,
     },
   ];

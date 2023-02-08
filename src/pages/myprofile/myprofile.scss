@@ -78,9 +78,22 @@
         margin: 10px 20px;
 
 
+        .rejected{
+          color:#fff;
+          background:rgba(255, 0, 0, 0.621);
+          border-radius: 30px;
+          padding:5px 10px;
+        }
+        .accepted{
+          color:black;
+          background:rgba(156, 255, 7, 0.879);
+          border-radius: 30px;
+          padding:5px 10px;
+        }
         .pending{
-          background-color: yellow;
-          border-radius: 20px;
+          color:black;
+          background:rgba(255, 255, 0, 0.89);
+          border-radius: 30px;
           padding:5px 10px;
         }
       }

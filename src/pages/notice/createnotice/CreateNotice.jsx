@@ -12,8 +12,9 @@ import { AuthContext } from '../../../context/AuthContext';
 const CreateNotice = ({title}) => {
 
     const {user} = useContext(AuthContext);
-
+    const [loading, setLoading] = useState(false);
     const checkValue = useRef();
+    const noticeTitle = useRef();
 
     const [userinfo, setUserInfo] = useState({
       checkedUser: [],
@@ -40,8 +41,9 @@ const CreateNotice = ({title}) => {
         e.preventDefault();
         const fileInput = document.getElementById("noticeFile");
 
+        setLoading(true)
         var data = new FormData();
-        data.append('noticeTitle', 'Submit Documents');
+        data.append('noticeTitle', noticeTitle);
         data.append('noticeFile', fileInput.files[0]);
         data.append('visibility', JSON.stringify(userinfo.checkedUser));
         
@@ -55,13 +57,16 @@ const CreateNotice = ({title}) => {
         };
         axios(config)
         .then(function (response) {
-          toast.success('Application Sent Successfully!', {
+          
+      setLoading(false)
+          toast.success('Notice Created Successfully!', {
             position: toast.POSITION.TOP_CENTER
           });
           console.log(JSON.stringify(response.data));
         })
         .catch(function (error) {
-          console.log(error);
+          
+      setLoading(false)
           toast.error(error.response.data.message, {
             position: toast.POSITION.TOP_CENTER
           });
@@ -88,15 +93,15 @@ const CreateNotice = ({title}) => {
 
                     <FormControl >
                       <label className='nform-head'>Select Notice Recievers <span>*</span></label>
-                      {/* <input 
-                        type="checkbox"
+                      <input 
+                        type="text"
                         className='inputBox'
                         required
                         label="Name"
-                        name="applicationTitle"
-                        placeholder='Please Enter your name'
-                        ref={appTitle}
-                      /> */}
+                        name="noticeTitle"
+                        placeholder='Enter Notice Title'
+                        ref={noticeTitle}
+                      />
                       {user.permissions.user.map((user) => (
                           <div className='noticeCheckbox'>
                             
@@ -108,7 +113,7 @@ const CreateNotice = ({title}) => {
                       
                     </FormControl>
                     <FormControl >
-                      <label className='nform-head'>Application File <span>*</span></label>
+                      <label className='nform-head'>Notice File <span>*</span></label>
                       <input 
                         type="file"
                         className='inputBox'
@@ -125,7 +130,14 @@ const CreateNotice = ({title}) => {
               
                 
           </form>
-          
+          {loading ? (
+          <div className="loading-ring">
+            Loading
+            <span></span>
+          </div>
+        ) : (
+          ""
+        )}
         </div>
       </div>
     </div>
