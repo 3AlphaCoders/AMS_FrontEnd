@@ -51,8 +51,8 @@ const Sidebar = () => {
           ) : (
             <li>
               <GroupIcon className="icon" />
-              <Link to="/users">
-                <span>User</span>
+              <Link to="/users/adduser">
+                <span>Add User</span>
               </Link>
             </li>
           )}

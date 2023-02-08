@@ -6,20 +6,20 @@ import HomeTable from '../../components/hometable/HomeTable'
 
 const Home = () => {
 
-
+  
   return (
     <div className='home'>
         <Sidebar />
         <div className='homeContainer'>
             <Navbar />
-            <div className='homeWidget'>
+            {/* <div className='homeWidget'>
                 <Widget type={"user"} />
                 <Widget type={"students"}/>
                 <Widget type={"courses"} />
                 <Widget type={"drafts"} />
-            </div>
+            </div> */}
             <div className='listContainer'>
-                <div className='listTitle'>Latest Applications</div>
+                <div className='listTitle'>Pending Application</div>
                 <HomeTable />
             </div>
         </div>

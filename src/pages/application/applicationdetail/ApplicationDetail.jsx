@@ -19,7 +19,7 @@ const ApplicationDetail = () => {
     //   console.log(response?.data)
     // }
     // fetchData();
-    setLoading(true);
+    
     getApplicationDetail(params.id)
     .then(function (response) {
         setAppDetail(response.application)

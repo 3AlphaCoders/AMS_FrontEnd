@@ -1,76 +1,97 @@
 import './hometable.scss'
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
+import { DataGrid } from "@mui/x-data-grid";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { useContext } from "react";
+import { AuthContext } from "../../context/AuthContext";
+import { Link } from 'react-router-dom';
 
 const HomeTable = () => {
 
-    const rows = [
-        {
-            id:1143155,
-            title:'Leave for issuing marksheet',
-            name:'Akshay Dixit',
-            date:'06/12/2022',
-            status:'Approved'
-        },
-        {
-            id:1143156,
-            title:'Leave for issuing cc',
-            name:'Saurabh',
-            date:'08/12/2022',
-            status:'Pending'
-        },
-        {
-            id:1143157,
-            title:'Leave for issuing tc',
-            name:'Tushar',
-            date:'08/12/2022',
-            status:'Reject'
-        },
-        {
-            id:1143158,
-            title:'Leave for issuing cc',
-            name:'Saurabh',
-            date:'08/12/2022',
-            status:'Pending'
-        },
-        
-    ]
+  const { user } = useContext(AuthContext);
+  const [loading, setLoading] = useState(false);
+  const [data, setData] = useState([]);
+  
+  useEffect(() => {
+
+    if(user.role === 'student'){
+
+    }else{
+      var config = {
+        method: "get",
+        url: "/application/pending",
+      };
+  
+      setLoading(true)
+      axios(config)
+        .then(function (response) {
+          setLoading(false)
+          setData(response.data.applications);
+        })
+        .catch(function (error) {
+          setLoading(false)
+        });
+    }
     
+  }, []);
+
+
+
+  const handleFile = (fileLink) => {
+    window.open(fileLink);
+  };
+
+  const userColumns = [
+    {
+      field: "applicationTitle",
+      headerName: "Application Title",
+      width: 250,
+    },
+
+    {
+      field: "applicationFile",
+      headerName: "Application File",
+      renderCell: (params) => {
+        return (
+          <Link
+            onClick={() => {
+              handleFile(params.row.applicationFile);
+            }}
+          >
+            {params.row.applicationFile}
+          </Link>
+        );
+      },
+
+      width: 300,
+    },
+    {
+      field: "submittedBy",
+      headerName: "Submitted By",
+      valueGetter: (params) => `${params.row.submittedBy.name}`,
+      width: 200,
+    },
+    {
+      field: "status",
+      headerName: "Status",
+      width: 150,
+    },
+  ];
+  
   return (
-    <TableContainer component={Paper} className="homeTable">
-      <Table sx={{ minWidth: 650 }} aria-label="simple table">
-        <TableHead>
-          <TableRow>
-            <TableCell>ID</TableCell>
-            <TableCell className='tableHead'>TITLE</TableCell>
-            <TableCell className='tableHead'>NAME</TableCell>
-            <TableCell className='tableHead'>DATE</TableCell>
-            <TableCell className='tableHead'>STATUS</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rows.map((row) => (
-            <TableRow
-              key={row.id}>
-              <TableCell>
-                {row.id}
-              </TableCell>
-              <TableCell>{row.title}</TableCell>
-              <TableCell>{row.name}</TableCell>
-              <TableCell>{row.date}</TableCell>
-              <TableCell>
-                <span className={`status ${row.status}`}>{row.status}</span>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+    <div className='homeTable'>
+         <DataGrid
+          className="datagrid"
+          rows={data}
+          getRowId={(row) => row._id}
+          columns={userColumns}
+          pageSize={9}
+          rowsPerPageOptions={[9]}
+          checkboxSelection
+        />
+    </div>
   )
 }
 

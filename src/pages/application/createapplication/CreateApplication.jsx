@@ -2,7 +2,7 @@ import './createapplication.scss'
 import Sidebar from "../../../components/sidebar/Sidebar";
 import Navbar from "../../../components/navbar/Navbar";
 import FormControl from '@mui/material/FormControl';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -11,7 +11,7 @@ const CreateApplication = ({title}) => {
 
     const appTitle = useRef();
     const appFile = useRef();
-
+    const [loading, setLoading] = useState(false);
    
     const createApplication = (e)=>{
         e.preventDefault();
@@ -30,14 +30,16 @@ const CreateApplication = ({title}) => {
           data : data
         };
 
-
+        setLoading(true);
         axios(config)
         .then(function (response) {
+          setLoading(false);
           toast.success('Application Sent Successfully!', {
             position: toast.POSITION.TOP_CENTER
           });
         })
         .catch(function (error) {
+          setLoading(false);
           toast.error(error.response.data.message, {
             position: toast.POSITION.TOP_CENTER
           });
@@ -93,7 +95,14 @@ const CreateApplication = ({title}) => {
               
                 
           </form>
-          
+          {loading ? (
+        <div className="loading-ring">
+          Loading
+          <span></span>
+        </div>
+      ) : (
+        ""
+      )}
         </div>
       </div>
     </div>
